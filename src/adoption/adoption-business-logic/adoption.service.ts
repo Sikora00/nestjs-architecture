@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { VerificationService } from 'src/verification/verification.service';
-import { Adoption } from './adoption.entity';
-import { InMemoryAdoptionRepository } from './adoption.repository';
-import { PetService } from './pet/pet.service';
+import { Adoption } from './entities/adoption.entity';
+import { AdoptionRepository } from './ports/adoption.repository';
+import { CanClientAdoptPet } from './ports/can-client-adopt-pet';
+import { PetRepository } from './ports/pet.repository';
 
 @Injectable()
 export class AdoptionService {
   constructor(
-    private adoptionRepository: InMemoryAdoptionRepository,
-    private verificationService: VerificationService,
-    private petRepository: PetService,
+    private adoptionRepository: AdoptionRepository,
+    private canClientAdoptPet: CanClientAdoptPet,
+    private petRepository: PetRepository,
   ) {}
   async adopt(petId: string, clientId: string): Promise<void> {
     const pet = await this.petRepository.findById(petId);
@@ -22,7 +22,7 @@ export class AdoptionService {
       throw new Error('The pet is already adopted');
     }
 
-    if (!(await this.verificationService.canAdopt())) {
+    if (!(await this.canClientAdoptPet.canAdopt(clientId))) {
       throw new Error(`This customer can't adopt`);
     }
 

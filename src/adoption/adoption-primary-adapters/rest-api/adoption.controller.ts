@@ -1,5 +1,5 @@
 import { Controller, Param, Post } from '@nestjs/common';
-import { AdoptionService } from './adoption.service';
+import { AdoptionService } from 'src/adoption/adoption-business-logic/adoption.service';
 
 @Controller('')
 export class AdoptionController {

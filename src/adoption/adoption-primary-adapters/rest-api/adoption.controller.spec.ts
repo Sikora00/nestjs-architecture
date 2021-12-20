@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdoptionController } from './adoption.controller';
-import { AdoptionService } from './adoption.service';
+import { AdoptionService } from '../../adoption.service';
 
 describe('AdoptionController', () => {
   let controller: AdoptionController;

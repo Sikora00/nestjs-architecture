@@ -1,3 +1,7 @@
+export enum PetType {
+  Dog,
+  Cat,
+}
 export class Pet {
-  constructor(public age: number) {}
+  constructor(public type: PetType, public id: string, public age: number) {}
 }

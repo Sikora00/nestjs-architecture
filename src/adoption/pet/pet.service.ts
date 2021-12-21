@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Pet } from '../pet.entity';
+import { Pet, PetType } from '../pet.entity';
 
 @Injectable()
 export class PetService {
   findById(petId: string): Pet {
-    return new Pet(1);
+    return new Pet(PetType.Cat, petId, 1);
   }
 }

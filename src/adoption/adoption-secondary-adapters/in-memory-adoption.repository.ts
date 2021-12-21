@@ -1,15 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { Adoption } from '../adoption-business-logic/entities/adoption.entity';
+import { VerificationService } from 'src/verification/verification.service';
+import {
+  Adoption,
+  AdoptionFactory,
+  AdoptResult,
+} from '../adoption-business-logic/domain/adoption.aggregate';
+import { Age } from '../adoption-business-logic/domain/age';
 import { AdoptionRepository } from '../adoption-business-logic/ports/adoption.repository';
 
 @Injectable()
 export class InMemoryAdoptionRepository implements AdoptionRepository {
-  private adoptions: Adoption[] = [];
+  constructor(private verificationService: VerificationService) {}
+  private adoptions: AdoptResult[] = [];
 
-  insert(adoption: Adoption): void {
+  insert(adoption: AdoptResult): void {
     this.adoptions.push(adoption);
   }
-  findByPet(petId: string): Adoption | undefined {
-    return this.adoptions.find((adoption) => adoption.petId === petId);
+
+  get(petId: string, clientId: string): Adoption {
+    const pet = { type: 0, id: petId, age: new Age(2, 0) }; // fetched from any data storage
+    // if pet is missing throw new Error('The pet is not followed by the system');
+    return AdoptionFactory(
+      pet,
+      this.verificationService.canAdopt(clientId),
+      !!this.adoptions.find((adoption) => adoption.petId === petId),
+    );
   }
 }

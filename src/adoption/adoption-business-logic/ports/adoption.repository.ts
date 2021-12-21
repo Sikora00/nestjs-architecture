@@ -1,6 +1,6 @@
-import { Adoption } from "../entities/adoption.entity";
+import { Adoption, AdoptResult } from '../domain/adoption.aggregate';
 
 export abstract class AdoptionRepository {
-  abstract findByPet(petId: string): Adoption | undefined;
-  abstract insert(arg0: Adoption): void;
+  abstract get(petId: string, clientId: string): Adoption;
+  abstract insert(adoption: AdoptResult): void;
 }
